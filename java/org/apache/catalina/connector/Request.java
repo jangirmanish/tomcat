@@ -3289,10 +3289,16 @@ public class Request implements HttpServletRequest {
             success = true;
         } finally {
             if (!success) {
-                parameters.setParseFailedReason(FailReason.UNKNOWN);
+                FailReason existingReason = parameters.getParseFailedReason();
+                if (reason != FailReason.POST_TOO_LARGE && 
+                    reason != FailReason.CLIENT_DISCONNECT && 
+                    reason != FailReason.REQUEST_BODY_INCOMPLETE
+                    ) {
+                    parameters.setParseFailedReason(FailReason.UNKNOWN);
+                }
             }
         }
-
+        
     }
 
 
